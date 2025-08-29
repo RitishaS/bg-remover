@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BG Remover Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #6a0dad;
+            --primary-dark: #4b0082;
+            --primary-light: #9c27b0;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .main-content {
+            padding: 7rem 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tool-card .card-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .tool-card .card-body {
+            padding: 2rem;
+        }
+        
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            color: white;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="/static/logo.png" alt="BG Remover Logo" class="logo-img">
+            <span class="logo-text">BG Remover Pro</span>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <section class="hero animate__animated animate__fadeIn">
+            <h1>Remove or Replace Backgrounds in Seconds</h1>
+        </section>
+
+        <div class="tools-grid">
+            <a href="/img_bg" class="tool-card animate__animated animate__fadeInUp">
+                <div class="card-header">Image BG Remover</div>
+                <div class="card-body">
+                    <div class="tool-icon">🖼️</div>
+                    <p>Upload any image and instantly remove the background</p>
+                    <div class="btn">Try It Now</div>
+                </div>
+            </a>
+
+            <a href="/replace" class="tool-card animate__animated animate__fadeInUp animate__delay-1s">
+                <div class="card-header">Live BG Replacement</div>
+                <div class="card-body">
+                    <div class="tool-icon">🎥</div>
+                    <p>Replace your background in real-time</p>
+                    <div class="btn">Start Now</div>
+                </div>
+            </a>
+
+            <a href="/img_rep" class="tool-card animate__animated animate__fadeInUp animate__delay-3s">
+                <div class="card-header">Image BG Replacer</div>
+                <div class="card-body">
+                    <div class="tool-icon">🖼️✨</div>
+                    <p>Upload an image and replace its background with another image</p>
+                    <div class="btn">Try It Now</div>
+                </div>
+            </a>
+
+            
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 BG Remover Pro</p>
+    </footer>
+</body>
+</html>

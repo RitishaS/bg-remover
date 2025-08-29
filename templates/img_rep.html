@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Background Replacer | BG Remover Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #6a0dad;
+            --primary-dark: #4b0082;
+            --primary-light: #9c27b0;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 2rem;
+            color: var(--primary-dark);
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .image-upload-area {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .upload-box {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .upload-box h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .preview-container {
+            width: 100%;
+            height: 300px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+        
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .bg-controls {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .bg-controls h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .bg-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .bg-option {
+            height: 100px;
+            width: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 2px solid #ddd;
+        }
+        
+        .bg-option:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .bg-option.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.3);
+        }
+        
+        .custom-upload {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .custom-upload:hover {
+            border-color: var(--primary);
+            background: rgba(106, 13, 173, 0.05);
+        }
+        
+        .process-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .process-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .result-container {
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .result-image {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 1.5rem;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+        }
+        
+        .status {
+            margin-top: 1.5rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            background: rgba(106, 13, 173, 0.1);
+            color: var(--primary-dark);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #28a745;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(0.95); opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .bg-palette {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="/static/logo.png" alt="BG Remover Logo" class="logo-img">
+            <span class="logo-text">BG Remover Pro</span>
+        </div>
+        <a href="/" class="back-btn">← Back to Home</a>
+    </nav>
+
+    <div class="container animate__animated animate__fadeIn">
+        <h1>Image Background Replacer</h1>
+        
+        <div class="image-upload-area">
+            <div class="upload-box">
+                <h2>Upload Your Image</h2>
+                <div class="preview-container" id="imagePreview">
+                    <span>No image selected</span>
+                    <img id="imagePreviewImg" class="preview-image">
+                </div>
+                <button class="upload-btn" onclick="document.getElementById('imageInput').click()">
+                    <span>📁</span> Select Image
+                </button>
+                <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event, 'imagePreviewImg')">
+            </div>
+            
+            <div class="upload-box">
+                <h2>Background Options</h2>
+                <div class="preview-container" id="bgPreview">
+                    <span>No background selected</span>
+                    <img id="bgPreviewImg" class="preview-image">
+                </div>
+                <button class="upload-btn" onclick="document.getElementById('bgInput').click()">
+                    <span>🎨</span> Custom Background
+                </button>
+                <input type="file" id="bgInput" accept="image/*" onchange="previewImage(event, 'bgPreviewImg')">
+            </div>
+        </div>
+        
+        <div class="bg-controls">
+            <h2>Or Choose from Our Backgrounds</h2>
+            
+            <div class="bg-palette">
+                <img src="/static/backgrounds/BG1.jpg" class="bg-option" onclick="selectPresetBg('BG1.jpg')" >
+                <img src="/static/backgrounds/BG2.jpg" class="bg-option" onclick="selectPresetBg('BG2.jpg')" >
+                <img src="/static/backgrounds/BG3.jpg" class="bg-option" onclick="selectPresetBg('BG3.jpg')">
+                <img src="/static/backgrounds/BG4.jpg" class="bg-option" onclick="selectPresetBg('BG3.jpg')">
+            </div>
+        </div>
+        
+        <button id="processBtn" class="process-btn" onclick="processImage()">
+            <span>✨</span> Replace Background
+        </button>
+        
+        <div id="status" class="status" style="display: none;">
+            <span class="status-dot"></span>
+            <span id="statusText">Processing your image...</span>
+        </div>
+        
+        <div class="result-container" id="resultContainer">
+            <h2>Result</h2>
+            <img id="resultImage" class="result-image">
+            <a id="downloadBtn" class="download-btn" download="replaced_bg.jpg">
+                <span>⬇️</span> Download Image
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let selectedImage = null;
+        let selectedBg = null;
+        let presetBg = null;
+        
+        function previewImage(event, previewId) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const preview = document.getElementById(previewId);
+            const previewContainer = preview.parentElement;
+            const placeholder = previewContainer.querySelector('span');
+            
+            if (previewId === 'imagePreviewImg') {
+                selectedImage = file;
+                presetBg = null;
+            } else {
+                selectedBg = file;
+                presetBg = null;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                placeholder.style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+        
+        function selectPresetBg(bgName) {
+            presetBg = bgName;
+            selectedBg = null;
+            
+            document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const bgPreview = document.getElementById('bgPreviewImg');
+            const bgPreviewContainer = document.getElementById('bgPreview');
+            const placeholder = bgPreviewContainer.querySelector('span');
+            
+            bgPreview.src = `/static/backgrounds/${bgName}`;
+            bgPreview.style.display = 'block';
+            placeholder.style.display = 'none';
+        }
+        
+        function processImage() {
+            if (!selectedImage) {
+                alert('Please select an image first');
+                return;
+            }
+            
+            if (!selectedBg && !presetBg) {
+                alert('Please select a background');
+                return;
+            }
+            
+            const status = document.getElementById('status');
+            const statusText = document.getElementById('statusText');
+            const processBtn = document.getElementById('processBtn');
+            
+            status.style.display = 'flex';
+            statusText.textContent = 'Processing your image...';
+            processBtn.disabled = true;
+            
+            const formData = new FormData();
+            formData.append('image', selectedImage);
+            
+            if (selectedBg) {
+                formData.append('background', selectedBg);
+            } else {
+                // For preset backgrounds, we'll need to fetch them first
+                fetch(`/static/backgrounds/${presetBg}`)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const file = new File([blob], presetBg, { type: blob.type });
+                        formData.append('background', file);
+                        sendProcessingRequest(formData);
+                    })
+                    .catch(err => {
+                        console.error('Error loading preset background:', err);
+                        statusText.textContent = 'Error loading background';
+                        processBtn.disabled = false;
+                    });
+                return;
+            }
+            
+            sendProcessingRequest(formData);
+        }
+        
+        function sendProcessingRequest(formData) {
+            fetch('/replace-image-bg', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Processing failed');
+                return response.blob();
+            })
+            .then(blob => {
+                const resultContainer = document.getElementById('resultContainer');
+                const resultImage = document.getElementById('resultImage');
+                const downloadBtn = document.getElementById('downloadBtn');
+                const statusText = document.getElementById('statusText');
+                
+                const url = URL.createObjectURL(blob);
+                resultImage.src = url;
+                downloadBtn.href = url;
+                downloadBtn.download = `replaced_bg_${new Date().getTime()}.jpg`;
+                
+                resultContainer.style.display = 'block';
+                statusText.textContent = 'Processing complete!';
+                document.getElementById('processBtn').disabled = false;
+                
+                // Scroll to result
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                document.getElementById('statusText').textContent = 'Error processing image';
+                document.getElementById('processBtn').disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>

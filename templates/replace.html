@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live BG Replacement | BG Remover Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #6a0dad;
+            --primary-dark: #4b0082;
+            --primary-light: #9c27b0;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 2rem;
+            color: var(--primary-dark);
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        #videoFeed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .bg-controls {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .bg-controls h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .bg-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .bg-option {
+            height: 100px;
+            width: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 2px solid #ddd;
+        }
+        
+        .bg-option:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .bg-option.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.3);
+        }
+        
+        .custom-upload {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .custom-upload:hover {
+            border-color: var(--primary);
+            background: rgba(106, 13, 173, 0.05);
+        }
+        
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        #customBg {
+            display: none;
+        }
+        
+        .btn-stop {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 1.5rem;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-stop:hover {
+            background: #810b17;
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            margin-top: 1.5rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            background: rgba(106, 13, 173, 0.1);
+            color: var(--primary-dark);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #28a745;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(0.95); opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .bg-palette {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+        
+        .recording-item {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            gap: 0.5rem;
+        }
+        
+        .recording-info {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .recording-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .recording-actions a, .recording-actions button {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .download-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .play-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+        }
+        
+        .play-btn:hover {
+            background: #218838;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+        }
+        
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        
+        video {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .video-container {
+            position: relative;
+        }
+        
+        .video-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            color: #6c757d;
+            height: 100px;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="/static/logo.png" alt="BG Remover Logo" class="logo-img">
+            <span class="logo-text">BG Remover Pro</span>
+        </div>
+        <a href="/" class="back-btn">← Back to Home</a>
+    </nav>
+
+    <div class="container animate__animated animate__fadeIn">
+        <h1>Live Background Replacement</h1>
+        
+        <div class="video-container">
+            <img id="videoFeed" src="/video_feed" alt="Live Video Feed">
+        </div>
+        
+        <div class="status animate__animated animate__fadeIn animate__delay-1s">
+            <span class="status-dot"></span>
+            <span id="statusText">Live background replacement ready</span>
+        </div>
+        
+        <div class="bg-controls">
+            <h2>Choose a Background</h2>
+            
+            <div class="bg-palette" id="bgPalette">
+                <img src="/static/backgrounds/BG1.jpg" class="bg-option" onclick="setBackground('BG1.jpg')" >
+                <img src="/static/backgrounds/BG2.jpg" class="bg-option" onclick="setBackground('BG2.jpg')" >
+                <img src="/static/backgrounds/BG3.jpg" class="bg-option" onclick="setBackground('BG3.jpg')" >
+                <img src="/static/backgrounds/BG4.jpg" class="bg-option" onclick="setBackground('BG4.jpg')" >
+            </div>
+            
+            <div class="custom-upload">
+                <label for="customBg">📁 Upload Your Own Background</label>
+                <input type="file" id="customBg" accept="image/*" onchange="uploadCustomBackground(event)">
+                <button class="upload-btn">Select Image</button>
+            </div>
+        </div>
+        
+        <div class="recording-controls">
+            <button id="recordBtn" class="btn-stop" onclick="toggleRecording()">
+                <span>●</span> Start Recording
+            </button>
+            <button class="btn-stop" onclick="window.location.href='/'">
+                <span>⏹️</span> Stop Video
+            </button>
+        </div>
+        
+        <div class="recordings-list">
+            <h3>Your Recordings</h3>
+            <div id="recordingsContainer">
+                <div class="video-placeholder">No recordings yet. Start recording to capture your video.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Background Management
+        function setBackground(bgName) {
+            document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            fetch('/set-background', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ background: bgName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== 'success') {
+                    console.error('Failed to set background:', data.message);
+                    event.target.classList.remove('active');
+                } else {
+                    updateStatus('Background set: ' + bgName);
+                }
+            })
+            .catch(err => {
+                console.error('Error setting background:', err);
+                event.target.classList.remove('active');
+            });
+        }
+
+        function uploadCustomBackground(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file (JPEG, PNG, etc.)');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('custom_bg', file);
+
+            fetch('/upload-bg', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Add the new background to the palette
+                    const bgPalette = document.getElementById('bgPalette');
+                    const newBg = document.createElement('img');
+                    newBg.src = data.url;
+                    newBg.className = 'bg-option';
+                    newBg.alt = 'Custom Background';
+                    newBg.onclick = function() { setBackground(data.filename); };
+                    bgPalette.appendChild(newBg);
+                    
+                    // Select the new background
+                    setBackground(data.filename);
+                    updateStatus('Custom background uploaded and set');
+                } else {
+                    alert('Failed to upload background: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(err => {
+                console.error('Upload error:', err);
+                alert('Failed to upload background. Please try again.');
+            });
+        }
+
+        // Recording Management
+        let isRecording = false;
+        let currentVideoPlayer = null;
+        
+        function toggleRecording() {
+            const recordBtn = document.getElementById('recordBtn');
+            
+            if (!isRecording) {
+                // Start recording
+                fetch('/start_recording', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        isRecording = true;
+                        recordBtn.innerHTML = '<span>●</span> Recording...';
+                        recordBtn.classList.add('recording');
+                        updateStatus('Recording started - click again to stop');
+                    }
+                });
+            } else {
+                // Stop recording
+                fetch('/stop_recording', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        isRecording = false;
+                        recordBtn.innerHTML = '<span>●</span> Start Recording';
+                        recordBtn.classList.remove('recording');
+                        updateStatus('Recording saved successfully');
+                        loadRecordings(); // Refresh recordings list
+                    }
+                });
+            }
+        }
+        
+        function loadRecordings() {
+            fetch('/list_recordings')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('recordingsContainer');
+                
+                if (data.recordings && data.recordings.length > 0) {
+                    container.innerHTML = '';
+                    data.recordings.forEach(recording => {
+                        const item = document.createElement('div');
+                        item.className = 'recording-item';
+                        
+                        const videoId = `video-${recording.name.replace(/\./g, '-')}`;
+                        
+                        item.innerHTML = `
+                            <div class="recording-info">
+                                <span>${recording.name}</span>
+                                <span>${recording.size} - ${recording.date}</span>
+                            </div>
+                            <video id="${videoId}" controls>
+                                <source src="${recording.url}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="recording-actions">
+                                <a href="${recording.url}" download class="download-btn">Download</a>
+                                <button onclick="toggleVideoPlayback('${videoId}')" class="play-btn">Play/Pause</button>
+                                <button onclick="deleteRecording('${recording.name}')" class="delete-btn">Delete</button>
+                            </div>
+                        `;
+                        container.appendChild(item);
+                    });
+                } else {
+                    container.innerHTML = '<div class="video-placeholder">No recordings yet. Start recording to capture your video.</div>';
+                }
+            });
+        }
+        
+        function toggleVideoPlayback(videoId) {
+            const video = document.getElementById(videoId);
+            if (video.paused) {
+                // Pause any currently playing video
+                if (currentVideoPlayer && currentVideoPlayer !== video) {
+                    currentVideoPlayer.pause();
+                }
+                video.play();
+                currentVideoPlayer = video;
+            } else {
+                video.pause();
+            }
+        }
+        
+        function deleteRecording(filename) {
+            if (confirm('Are you sure you want to delete this recording?')) {
+                fetch(`/delete_recording/${filename}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        updateStatus('Recording deleted');
+                        loadRecordings();
+                    } else {
+                        alert('Error deleting recording: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Delete error:', err);
+                    alert('Failed to delete recording');
+                });
+            }
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('statusText').textContent = message;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load existing recordings
+            loadRecordings();
+            
+            // Set default background
+            setBackground('BG1.jpg');
+            
+            // Trigger file input when button is clicked
+            document.querySelector('.upload-btn').addEventListener('click', function() {
+                document.getElementById('customBg').click();
+            });
+        });
+    </script>
+</body>
+</html>
